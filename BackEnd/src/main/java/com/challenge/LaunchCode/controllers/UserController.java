@@ -25,27 +25,20 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    JwtUtils jwtUtils;
-
     @PutMapping("/updateProfile")
     public ResponseEntity<?> updateProfile(
             @RequestBody @Valid EditUserRequest editUserRequest,
             Authentication authentication) {
 
-        // Check if the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             return new ResponseEntity<>("User is not authenticated", HttpStatus.UNAUTHORIZED);
         }
 
-        // Get the authenticated user's username
         String username = authentication.getName();
 
-        // Fetch the existing user from the database
         User existingUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Update the user's profile details
         existingUser.setFirstName(editUserRequest.getFirstName());
         existingUser.setLastName(editUserRequest.getLastName());
         existingUser.setEmail(editUserRequest.getEmail());

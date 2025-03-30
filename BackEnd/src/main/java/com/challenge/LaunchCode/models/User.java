@@ -43,10 +43,13 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
     private String bio;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Transaction> transactions = new HashSet<>();
+    private double netWorth;
 
     public User() {}
 
-    public User(String username, String firstName, String lastName, String email, String password, Set<Role> roles, String bio) {
+    public User(String username, String firstName, String lastName, String email, String password, Set<Role> roles, String bio, Set<Transaction> transactions) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -54,6 +57,7 @@ public class User {
         this.password = password;
         this.roles = roles;
         this.bio = bio;
+        this.transactions = transactions;
     }
 
     public User(@Size(min = 3, max = 50, message = "Username must be between three and fifty characters.") @NotBlank(message = "Username must not be blank.") String username, @Size(min = 3, max = 20, message = "First name must be between three and twenty characters.") @NotBlank(message = "First name must not be blank.") String firstName, @Size(min = 3, max = 20, message = "Last name must be between three and twenty characters.") @NotBlank(message = "Last name must not be blank.") String lastName, @Email(message = "Email address must be well formated.") @NotBlank(message = "Email must not be blank.") String email, String encode) {
@@ -117,5 +121,28 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public double getNetWorth() {
+        return netWorth;
+    }
+
+    public void setNetWorth(double netWorth) {
+        this.netWorth = netWorth;
+    }
+
+    public void updateNetWorth() {
+        double totalIncome = 0;
+        double totalExpense = 0;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getType() == TransactionType.INCOME) {
+                totalIncome += transaction.getAmount();
+            } else if (transaction.getType() == TransactionType.EXPENSE) {
+                totalExpense += transaction.getAmount();
+            }
+        }
+
+        this.netWorth = totalIncome - totalExpense;
     }
 }

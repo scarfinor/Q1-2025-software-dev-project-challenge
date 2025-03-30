@@ -1,43 +1,38 @@
 package com.challenge.LaunchCode.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int income;
-    private int expense;
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
     private String description;
+    private Double amount;
 
-    public Transaction(int income, int expense, String description) {
-        this.income = income;
-        this.expense = expense;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Transaction(TransactionType type, String description, Double amount, User user) {
+        this.type = type;
         this.description = description;
+        this.amount = amount;
+        this.user = user;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getIncome() {
-        return income;
+    public TransactionType getType() {
+        return type;
     }
 
-    public void setIncome(int income) {
-        this.income = income;
-    }
-
-    public int getExpense() {
-        return expense;
-    }
-
-    public void setExpense(int expense) {
-        this.expense = expense;
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 
     public String getDescription() {
@@ -46,5 +41,21 @@ public class Transaction {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
