@@ -1,4 +1,7 @@
 package com.challenge.LaunchCode.models;
 
 public enum ERole {
+    ROLE_USER,
+    ROLE_MODERATOR,
+    ROLE_ADMIN
 }
