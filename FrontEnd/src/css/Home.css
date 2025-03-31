@@ -1,14 +1,12 @@
-/* General Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Apply background image to the body element */
-body {
+.home-page {
   font-family: Arial, sans-serif;
-  background-image: url("../assets/images/seamless.avif");
+  background-image: url("../assets/images/dark5.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -16,53 +14,48 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
   color: #fff;
+  overflow: hidden;
 }
 
-/* Main content wrapper */
 .home-content {
   width: 100%;
   max-width: 600px;
-  padding: 40px;
-  margin: 0 auto;
+  padding: 30px;
   text-align: center;
-  z-index: 1;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #000000, #c0c0c0, #1f3d61);
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+  color: white;
+  z-index: 10;
 }
 
-/* Home card styling */
 .home-card {
   width: 100%;
-  padding: 20px;
-  background-color: #fff;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.7);
   border-radius: 8px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  z-index: 2;
+  margin-top: 20px;
 }
 
-/* Title Styling */
 h2 {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #333;
+  color: #fff;
 }
 
-/* Intro text styling */
 .intro-text {
   font-size: 1rem;
-  color: #333;
+  color: #ccc;
   margin-bottom: 15px;
 }
 
-/* Button styling */
 button {
   width: 100%;
   padding: 12px;
   font-size: 1.1rem;
-  background-color: #c0c0c0;
+  background-color: #999b9b;
   color: white;
   border: none;
   border-radius: 5px;
@@ -72,19 +65,13 @@ button {
 }
 
 button:hover {
-  background-color: #c0c0c0;
+  background-color: #777777;
 }
 
-/* From 412px to 600px (Mobile Small) */
 @media (max-width: 600px) {
-  body {
-    padding: 0 10px;
-  }
-
   .home-content {
     padding: 25px;
     max-width: 90%;
-    margin: 20px auto;
   }
 
   h2 {
@@ -96,7 +83,6 @@ button:hover {
   }
 }
 
-/* From 500px to 1024px (Tablets) */
 @media (max-width: 1024px) {
   .home-content {
     padding: 30px;
@@ -112,11 +98,11 @@ button:hover {
   }
 }
 
-/* Larger screens */
 @media (max-width: 1600px) {
   .home-content {
     max-width: 700px;
   }
+
   h2 {
     font-size: 2rem;
   }

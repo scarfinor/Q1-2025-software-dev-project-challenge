@@ -1,53 +1,61 @@
-/* General reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
+.page-container {
   font-family: Arial, sans-serif;
-  background-image: url("../assets/images/seamless.avif");
+  background-image: url("../assets/images/dark5.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
-  padding: 10px;
+  overflow: hidden;
 }
 
-/* Form styling */
-.sign-up-form,
-.sign-in-form {
+.auth-content {
   width: 100%;
   max-width: 600px;
-  padding: 40px;
-  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #000000, #c0c0c0, #1f3d61);
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+  color: white;
+  z-index: 10;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
   text-align: center;
-  z-index: 1;
-  background-color: rgba(255, 255, 255, 0.8);
+  color: #f0f0f0;
+}
+
+.form-container {
+  width: 100%;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.7);
   border-radius: 8px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Form Group Styling */
 .form-group {
   margin-bottom: 20px;
 }
 
-/* Label Styling */
-.form-group label {
+label {
   font-size: 1rem;
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: #fff;
 }
 
-/* Input Fields */
-.form-group input {
+input {
   width: 100%;
   padding: 12px;
   font-size: 1rem;
@@ -57,7 +65,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* Button Styling */
 button {
   width: 100%;
   padding: 12px;
@@ -71,21 +78,18 @@ button {
 }
 
 button:hover {
-  background-color: #999b9b;
+  background-color: #777777;
 }
 
-/* Error Styling */
 .error {
   color: red;
   font-size: 0.9rem;
   margin-top: 5px;
 }
 
-/* Responsive Styling for Small Screens */
 @media (max-width: 600px) {
-  .sign-up-form,
-  .sign-in-form {
-    padding: 20px;
+  .auth-content {
+    padding: 25px;
     max-width: 90%;
   }
 
@@ -93,31 +97,32 @@ button:hover {
     font-size: 1.5rem;
   }
 
-  .form-group input {
-    padding: 10px;
-  }
-
   button {
     padding: 10px;
   }
 }
 
-/* Larger screen styling */
+@media (max-width: 1024px) {
+  .auth-content {
+    padding: 30px;
+    max-width: 80%;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  button {
+    padding: 11px;
+  }
+}
+
 @media (max-width: 1600px) {
-  .sign-up-form,
-  .sign-in-form {
+  .auth-content {
     max-width: 700px;
   }
 
   h2 {
     font-size: 2rem;
-  }
-
-  .form-group input {
-    padding: 12px;
-  }
-
-  button {
-    padding: 12px;
   }
 }
