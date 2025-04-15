@@ -2,6 +2,8 @@ package com.challenge.LaunchCode.security.jwt;
 
 import com.challenge.LaunchCode.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,34 +30,51 @@ public class JwtUtils {
             return Jwts.builder()
                     .setSubject(userPrincipal.getUsername())
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)) // Set expiration based on config
+                    .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                     .signWith(SignatureAlgorithm.HS512, jwtSecret)
                     .compact();
         }
         throw new IllegalArgumentException("Unknown authentication type");
     }
 
-
     public boolean validateJwtToken(String authToken) {
-                try {
-                    Jws<Claims> claimsJws = Jwts.parser()
-                            .setSigningKey(jwtSecret)
-                            .build()
-                            .parseClaimsJws(authToken);
+        try {
+            Jws<Claims> claimsJws = Jwts.parser()
+                    .setSigningKey(jwtSecret)
+                    .build()
+                    .parseClaimsJws(authToken);
 
-                    return !claimsJws.getBody().getExpiration().before(new Date());
-                } catch (JwtException e) {
-                    logger.error("JWT validation failed: {}", e.getMessage());
-                    return false;
-                }
-            }
+            return !claimsJws.getBody().getExpiration().before(new Date());
+        } catch (JwtException e) {
+            logger.error("JWT validation failed: {}", e.getMessage());
+            return false;
+        }
+    }
 
-            public String getUsernameFromJwtToken(String token) {
-                return Jwts.parser()
-                        .setSigningKey(jwtSecret)
-                        .build()
-                        .parseClaimsJws(token)
-                        .getBody()
-                        .getSubject();
-            }
+    public String getUsernameFromJwtToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public void setJwtInCookies(HttpServletResponse response, String jwt) {
+        Cookie jwtCookie = new Cookie("JWT", jwt);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(3600);
+        response.addCookie(jwtCookie);
+    }
+
+    public void clearJwtCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("JWT", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
         }

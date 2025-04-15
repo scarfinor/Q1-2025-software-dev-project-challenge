@@ -1,6 +1,5 @@
 package com.challenge.LaunchCode.security;
 
-import com.challenge.LaunchCode.models.ERole;
 import com.challenge.LaunchCode.security.jwt.AuthEntryPointJwt;
 import com.challenge.LaunchCode.security.jwt.AuthTokenFilter;
 import com.challenge.LaunchCode.security.services.UserDetailsServiceImpl;
@@ -64,15 +63,17 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler)) // Handle unauthorized errors
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/signup").permitAll()
                         .requestMatchers("/api/auth/signin").permitAll()
-                        .requestMatchers("/api/users/updateProfile").hasAnyAuthority(ERole.ROLE_USER.name())
-                        .anyRequest().authenticated() // Secure all other endpoints
+                        .requestMatchers("/api/users/updateProfile").authenticated()
+                        .requestMatchers("/api/users/logout").authenticated()
+                        .requestMatchers("/api/users/deleteAccount").authenticated()
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class); // Add JWT filter for API endpoints
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

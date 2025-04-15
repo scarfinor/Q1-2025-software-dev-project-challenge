@@ -5,12 +5,11 @@ import com.challenge.LaunchCode.models.Role;
 import com.challenge.LaunchCode.models.User;
 import com.challenge.LaunchCode.payloads.requests.LoginRequest;
 import com.challenge.LaunchCode.payloads.requests.SignupRequest;
-import com.challenge.LaunchCode.payloads.responses.JwtResponse;
 import com.challenge.LaunchCode.payloads.responses.MessageResponse;
 import com.challenge.LaunchCode.repositories.RoleRepository;
 import com.challenge.LaunchCode.repositories.UserRepository;
 import com.challenge.LaunchCode.security.jwt.JwtUtils;
-import com.challenge.LaunchCode.security.services.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -49,25 +46,16 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        jwtUtils.setJwtInCookies(response, jwt);
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getFirstName(),
-                userDetails.getLastName(),
-                roles));
+        return ResponseEntity.ok("User authenticated successfully");
     }
 
     @PostMapping(value = "/signup", produces = "application/json")
